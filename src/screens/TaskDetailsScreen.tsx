@@ -103,14 +103,14 @@ export default function TaskDetailsScreen() {
       </Text>
 
       <Text style={styles.text}>
-        {task.dueDate}
+        {task.taskDate}
       </Text>
 
       <Text style={styles.label}>
         Current status
       </Text>
 
-      <Text style={styles.status}>
+      <Text style={styles.text}>
         {formatStatus(task.status)}
       </Text>
 
@@ -138,6 +138,19 @@ export default function TaskDetailsScreen() {
         >
           <Text style={styles.actionText}>
             Complete
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() =>
+            handleStatusChange(
+              "cancelled"
+            )
+          }
+        >
+          <Text style={styles.actionText}>
+            Cancel
           </Text>
         </TouchableOpacity>
 
@@ -199,12 +212,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#111827",
-  },
-
-  status: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginTop: 4,
   },
 
   actions: {

@@ -4,12 +4,13 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
-
 import { Task } from "../types/task";
 import { formatStatus } from "../utils/formatStatus";
-import { format } from "date-fns";
+import {
+  format,
+  parse,
+} from "date-fns";
 
 interface Props {
   task: Task;
@@ -52,8 +53,12 @@ export default function TaskCard({
 
         <Text style={styles.date}>
           {format(
-            new Date(task.dueDate),
-            "d MMM yyyy, HH:mm"
+            parse(
+              task.taskDate,
+              "dd.MM.yyyy HH:mm",
+              new Date()
+            ),
+            "dd.MM.yyyy HH:mm"
           )}
         </Text>
 

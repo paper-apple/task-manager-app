@@ -1,5 +1,3 @@
-import { Task } from "./task";
-
 export type RootStackParamList = {
   Tasks: undefined;
 

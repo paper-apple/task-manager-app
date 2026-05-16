@@ -6,8 +6,7 @@ export const mockTasks: Task[] = [
     title: "Inspect cooling system",
     description: "Check air conditioning unit functionality",
     address: "12 Main Street",
-    createdAt: new Date().toISOString(),
-    dueDate: "2026-05-20 10:00",
+    taskDate: "20.05.2026 10:00",
     status: "in_progress",
   },
 
@@ -16,8 +15,7 @@ export const mockTasks: Task[] = [
     title: "Replace router",
     description: "Install new office router",
     address: "45 Business Ave",
-    createdAt: new Date().toISOString(),
-    dueDate: "2026-05-18 14:30",
+    taskDate: "18.05.2026 14:30",
     status: "in_progress",
   },
 
@@ -26,8 +24,7 @@ export const mockTasks: Task[] = [
     title: "Elevator maintenance",
     description: "Monthly inspection",
     address: "78 Center Plaza",
-    createdAt: new Date().toISOString(),
-    dueDate: "2026-05-25 09:00",
+    taskDate: "25.05.2026 09:00",
     status: "completed",
   },
 ];

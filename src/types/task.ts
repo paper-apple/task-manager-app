@@ -8,7 +8,6 @@ export interface Task {
   title: string;
   description: string;
   address: string;
-  createdAt: string;
-  dueDate: string;
+  taskDate: string;
   status: TaskStatus;
 }

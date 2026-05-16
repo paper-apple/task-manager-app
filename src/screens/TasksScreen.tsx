@@ -22,6 +22,7 @@ import {
   loadTasks,
   saveTasks,
 } from "../storage/tasksStorage";
+import { parse } from "date-fns";
 
 export default function TasksScreen() {
   const navigation = useNavigation<any>();
@@ -64,11 +65,21 @@ export default function TasksScreen() {
       );
     }
 
-    return copiedTasks.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
-    );
+    return copiedTasks.sort((a, b) => {
+      const dateA = parse(
+        a.taskDate,
+        "dd.MM.yyyy HH:mm",
+        new Date()
+      ).getTime();
+
+      const dateB = parse(
+        b.taskDate,
+        "dd.MM.yyyy HH:mm",
+        new Date()
+      ).getTime();
+
+      return dateB - dateA;
+    });
   }, [tasks, sortBy]);
 
   return (
@@ -121,7 +132,8 @@ export default function TasksScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              No tasks yet
+              No tasks yet.
+              Tap + to create your first task.
             </Text>
           </View>
         }
