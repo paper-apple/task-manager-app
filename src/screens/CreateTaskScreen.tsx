@@ -164,9 +164,8 @@ const styles = StyleSheet.create({
     bottom: "100%",
     left: 0,
     right: 0,
-    backgroundColor: "#ef4444",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    backgroundColor: "rgba(239, 68, 68, 0.7)",
+    paddingVertical: 14,
     borderRadius: 12,
     marginBottom: 10,
     alignItems: "center",
@@ -175,9 +174,8 @@ const styles = StyleSheet.create({
 
   toastText: {
     color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "600",
   },
 
   buttonWrapper: {

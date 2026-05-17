@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Task } from "../types/task";
 
 const TASKS_KEY = "TASKS";
+const HAS_LAUNCHED_KEY = "HAS_LAUNCHED";
 
 export async function saveTasks(
   tasks: Task[]
@@ -108,5 +109,32 @@ export async function updateTaskStatus(
       "Error updating task:",
       error
     );
+  }
+}
+
+export async function isFirstLaunch() {
+  try {
+    const hasLaunched =
+      await AsyncStorage.getItem(
+        HAS_LAUNCHED_KEY
+      );
+
+    if (hasLaunched === null) {
+      await AsyncStorage.setItem(
+        HAS_LAUNCHED_KEY,
+        "true"
+      );
+
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log(
+      "Error checking first launch:",
+      error
+    );
+
+    return false;
   }
 }

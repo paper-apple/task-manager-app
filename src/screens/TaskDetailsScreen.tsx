@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   View,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import {
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
@@ -41,9 +42,9 @@ export default function TaskDetailsScreen() {
     }
   }
 
-  useEffect(() => {
-    fetchTask();
-  }, []);
+    useEffect(() => {
+      fetchTask();
+    }, []);
 
   async function handleDelete() {
     if (!task) {
