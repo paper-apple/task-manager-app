@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from "react-native";
 
 import {
@@ -28,15 +29,12 @@ export default function TaskDetailsScreen() {
 
   const { taskId } = route.params;
 
-  const [task, setTask] =
-    useState<Task | null>(null);
+  const [task, setTask] = useState<Task | null>(null);
 
   async function fetchTask() {
     const tasks = await loadTasks();
 
-    const currentTask = tasks.find(
-      (item) => item.id === taskId
-    );
+    const currentTask = tasks.find((item) => item.id === taskId);
 
     if (currentTask) {
       setTask(currentTask);
@@ -57,17 +55,12 @@ export default function TaskDetailsScreen() {
     navigation.goBack();
   }
 
-  async function handleStatusChange(
-    status: Task["status"]
-  ) {
+  async function handleStatusChange(status: Task["status"]) {
     if (!task) {
       return;
     }
 
-    await updateTaskStatus(
-      task.id,
-      status
-    );
+    await updateTaskStatus(task.id, status);
 
     await fetchTask();
   }
@@ -76,112 +69,74 @@ export default function TaskDetailsScreen() {
     return null;
   }
 
+  function getStatusButtonStyle(status: Task["status"]) {
+    if (task?.status === status) {
+      return [styles.actionButton, styles.activeButton];
+    }
+    return [styles.actionButton, styles.inactiveButton];
+  }
+
+  function getStatusTextStyle(status: Task["status"]) {
+    if (task?.status === status) {
+      return [styles.actionText, styles.activeText];
+    }
+    return [styles.actionText, styles.inactiveText];
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {task.title}
-      </Text>
+    <View style={styles.wrapper}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>{task.title}</Text>
 
-      <Text style={styles.label}>
-        Description
-      </Text>
+        <Text style={styles.label}>Description</Text>
+        <Text style={styles.text}>{task.description}</Text>
 
-      <Text style={styles.text}>
-        {task.description}
-      </Text>
+        <Text style={styles.label}>Address</Text>
+        <Text style={styles.text}>{task.address}</Text>
 
-      <Text style={styles.label}>
-        Address
-      </Text>
+        <Text style={styles.label}>Task date</Text>
+        <Text style={styles.text}>{task.taskDate}</Text>
 
-      <Text style={styles.text}>
-        {task.address}
-      </Text>
-
-      <Text style={styles.label}>
-        Due date
-      </Text>
-
-      <Text style={styles.text}>
-        {task.taskDate}
-      </Text>
-
-      <Text style={styles.label}>
-        Current status
-      </Text>
-
-      <Text style={styles.text}>
-        {formatStatus(task.status)}
-      </Text>
+        <Text style={styles.label}>Current status</Text>
+        <Text style={styles.text}>{formatStatus(task.status)}</Text>
+      </ScrollView>
 
       <View style={styles.actions}>
         <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() =>
-            handleStatusChange(
-              "in_progress"
-            )
-          }
+          style={getStatusButtonStyle("in_progress")}
+          onPress={() => handleStatusChange("in_progress")}
         >
-          <Text style={styles.actionText}>
-            In Progress
-          </Text>
+          <Text style={getStatusTextStyle("in_progress")}>In progress</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() =>
-            handleStatusChange(
-              "completed"
-            )
-          }
+          style={getStatusButtonStyle("completed")}
+          onPress={() => handleStatusChange("completed")}
         >
-          <Text style={styles.actionText}>
-            Complete
-          </Text>
+          <Text style={getStatusTextStyle("completed")}>Complete</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() =>
-            handleStatusChange(
-              "cancelled"
-            )
-          }
+          style={getStatusButtonStyle("cancelled")}
+          onPress={() => handleStatusChange("cancelled")}
         >
-          <Text style={styles.actionText}>
-            Cancel
-          </Text>
+          <Text style={getStatusTextStyle("cancelled")}>Cancel</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[
-            styles.actionButton,
-            styles.deleteButton,
-          ]}
+          style={[styles.actionButton, styles.deleteButton]}
           onPress={() =>
-            Alert.alert(
-              "Delete task",
-              "Are you sure?",
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-
-                {
-                  text: "Delete",
-                  style: "destructive",
-                  onPress:
-                    handleDelete,
-                },
-              ]
-            )
+            Alert.alert("Delete task", "Are you sure?", [
+              { text: "Cancel", style: "cancel" },
+              { text: "Delete", style: "destructive", onPress: handleDelete },
+            ])
           }
         >
-          <Text style={styles.actionText}>
-            Delete
-          </Text>
+          <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -189,10 +144,18 @@ export default function TaskDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    padding: 16,
     backgroundColor: "#f2f4f7",
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 8,
   },
 
   title: {
@@ -215,15 +178,24 @@ const styles = StyleSheet.create({
   },
 
   actions: {
-    marginTop: 32,
+    padding: 16,
+    paddingTop: 8,
     gap: 12,
+    backgroundColor: "#f2f4f7",
   },
 
   actionButton: {
-    backgroundColor: "#111827",
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center",
+  },
+
+  activeButton: {
+    backgroundColor: "#111827",
+  },
+
+  inactiveButton: {
+    backgroundColor: "#e5e7eb",
   },
 
   deleteButton: {
@@ -231,6 +203,18 @@ const styles = StyleSheet.create({
   },
 
   actionText: {
+    fontWeight: "600",
+  },
+
+  activeText: {
+    color: "#fff",
+  },
+
+  inactiveText: {
+    color: "#111827",
+  },
+
+  deleteText: {
     color: "#fff",
     fontWeight: "600",
   },

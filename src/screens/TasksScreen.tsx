@@ -27,19 +27,14 @@ import { parse } from "date-fns";
 export default function TasksScreen() {
   const navigation = useNavigation<any>();
 
-  const [tasks, setTasks] =
-    useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [sortBy, setSortBy] =
-    useState<"date" | "status">(
-      "date"
-    );
+  const [sortBy, setSortBy] = useState<"date" | "status">("date");
 
   useFocusEffect(
     useCallback(() => {
       async function fetchTasks() {
-        const storedTasks =
-          await loadTasks();
+        const storedTasks = await loadTasks();
 
         if (storedTasks.length > 0) {
           setTasks(storedTasks);
@@ -56,27 +51,25 @@ export default function TasksScreen() {
     saveTasks(tasks);
   }, [tasks]);
 
+  const statusPriority: Record<Task["status"], number> = {
+    in_progress: 0,
+    completed: 1,
+    cancelled: 2,
+  };
+
   const sortedTasks = useMemo(() => {
     const copiedTasks = [...tasks];
 
     if (sortBy === "status") {
-      return copiedTasks.sort((a, b) =>
-        a.status.localeCompare(b.status)
+      return copiedTasks.sort(
+        (a, b) => statusPriority[a.status] - statusPriority[b.status]
       );
     }
 
     return copiedTasks.sort((a, b) => {
-      const dateA = parse(
-        a.taskDate,
-        "dd.MM.yyyy HH:mm",
-        new Date()
-      ).getTime();
+      const dateA = parse(a.taskDate, "dd.MM.yyyy HH:mm", new Date()).getTime();
 
-      const dateB = parse(
-        b.taskDate,
-        "dd.MM.yyyy HH:mm",
-        new Date()
-      ).getTime();
+      const dateB = parse(b.taskDate, "dd.MM.yyyy HH:mm", new Date()).getTime();
 
       return dateB - dateA;
     });
@@ -86,19 +79,13 @@ export default function TasksScreen() {
     <View style={styles.container}>
       <View style={styles.sortContainer}>
         <TouchableOpacity
-          style={[
-            styles.sortButton,
-            sortBy === "date" &&
-              styles.activeSortButton,
-          ]}
+          style={[styles.sortButton, sortBy === "date" && styles.activeSortButton]}
           onPress={() => setSortBy("date")}
         >
           <Text
             style={[
               styles.sortButtonText,
-              sortBy === "date" && {
-                color: "#fff",
-              },
+              sortBy === "date" && { color: "#fff" },
             ]}
           >
             Sort by date
@@ -106,50 +93,37 @@ export default function TasksScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[
-            styles.sortButton,
-            sortBy === "status" &&
-              styles.activeSortButton,
-          ]}
-          onPress={() =>
-            setSortBy("status")
-          }
+          style={[styles.sortButton, sortBy === "status" && styles.activeSortButton]}
+          onPress={() => setSortBy("status")}
         >
           <Text
             style={[
               styles.sortButtonText,
-              sortBy === "status" && {
-                color: "#fff",
-              },
+              sortBy === "status" && { color: "#fff" },
             ]}
           >
             Sort by status
           </Text>
         </TouchableOpacity>
       </View>
-      
+
       <FlatList
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              No tasks yet.
-              Tap + to create your first task.
+              No tasks yet. Tap + to create your first task.
             </Text>
           </View>
         }
         data={sortedTasks}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TaskCard task={item} />
-        )}
+        renderItem={({ item }) => <TaskCard task={item} />}
         contentContainerStyle={styles.list}
       />
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() =>
-          navigation.navigate("CreateTask")
-        }
+        onPress={() => navigation.navigate("CreateTask")}
       >
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
