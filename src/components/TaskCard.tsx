@@ -1,70 +1,43 @@
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Task } from "../types/task";
 import { formatStatus } from "../utils/formatStatus";
-import {
-  format,
-  parse,
-} from "date-fns";
+import { format, parse } from "date-fns";
 
 interface Props {
   task: Task;
 }
 
-export default function TaskCard({
-  task,
-}: Props) {
+export default function TaskCard({ task }: Props) {
   const navigation = useNavigation<any>();
+
+  const formattedDate = format(
+    parse(task.taskDate, "dd.MM.yyyy HH:mm", new Date()),
+    "dd.MM.yyyy HH:mm"
+  );
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() =>
-        navigation.navigate(
-          "TaskDetails",
-          {
-            taskId: task.id,
-          }
-        )
-      }
+      onPress={() => navigation.navigate("TaskDetails", { taskId: task.id })}
     >
       <View style={styles.card}>
         <View style={styles.row}>
-          <Text style={styles.title}>
-            {task.title}
-          </Text>
+          <Text style={styles.title}>{task.title}</Text>
 
-          <View
-            style={[
-              styles.badge,
-              styles[task.status],
-            ]}
-          >
-            <Text style={styles.badgeText}>
-              {formatStatus(task.status)}
-            </Text>
+          <View style={[styles.badge, styles[task.status]]}>
+            <Text style={styles.badgeText}>{formatStatus(task.status)}</Text>
           </View>
         </View>
 
-        <Text style={styles.date}>
-          {format(
-            parse(
-              task.taskDate,
-              "dd.MM.yyyy HH:mm",
-              new Date()
-            ),
-            "dd.MM.yyyy HH:mm"
-          )}
-        </Text>
+        <Text style={styles.date}>{formattedDate}</Text>
 
-        <Text style={styles.address}>
-          {task.address}
-        </Text>
+        <Text style={styles.address}>{task.address}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -80,14 +53,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
 
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
-
     elevation: 3,
   },
 

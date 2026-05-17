@@ -5,8 +5,7 @@ import TasksScreen from "../screens/TasksScreen";
 import { RootStackParamList } from "../types/navigation";
 import TaskDetailsScreen from "../screens/TaskDetailsScreen";
 
-const Stack =
-  createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
@@ -14,14 +13,8 @@ export default function AppNavigator() {
       <Stack.Navigator
         screenOptions={{
           headerShadowVisible: false,
-
-          headerStyle: {
-            backgroundColor: "#f2f4f7",
-          },
-
-          headerTitleStyle: {
-            fontWeight: "700",
-          },
+          headerStyle: {backgroundColor: "#f2f4f7"},
+          headerTitleStyle: {fontWeight: "700"},
         }}
       >
         <Stack.Screen
@@ -31,16 +24,12 @@ export default function AppNavigator() {
         <Stack.Screen
           name="CreateTask"
           component={CreateTaskScreen}
-          options={{
-            title: "Create Task",
-          }}
+          options={{title: "Create Task"}}
         />
         <Stack.Screen
           name="TaskDetails"
           component={TaskDetailsScreen}
-          options={{
-            title: "Task Details",
-          }}
+          options={{title: "Task Details"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

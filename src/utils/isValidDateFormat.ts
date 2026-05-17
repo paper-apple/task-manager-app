@@ -1,12 +1,10 @@
 export function isValidDateFormat(value: string) {
-  const regex =
-    /^(\d{2})\.(\d{2})\.(\d{4}) (\d{2}):(\d{2})$/;
+  const regex = /^(\d{2})\.(\d{2})\.(\d{4}) (\d{2}):(\d{2})$/;
 
   if (!regex.test(value)) return false;
 
-  const [, day, month, year, hour, minute] =
-    value.match(regex)!;
-
+  const [, day, month, year, hour, minute] = value.match(regex)!;
+  
   const date = new Date(
     Number(year),
     Number(month) - 1,

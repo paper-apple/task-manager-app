@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import {
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  ScrollView,
+  Animated,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
   View,
-  Animated,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { v4 as uuid } from "uuid";
@@ -28,34 +28,33 @@ export default function CreateTaskScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
+  const isAnyFieldEmpty = [
+    title, description, address, taskDate
+  ].some(field => !field.trim());
+
   const showToast = (message: string) => {
     setErrorToast(message);
     setToastVisible(true);
     
     Animated.timing(opacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
     }).start();
     
     setTimeout(() => {
-        Animated.timing(opacity, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: true,
-        }).start(() => setToastVisible(false));
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => setToastVisible(false));
     }, 2000);
   };
 
-  async function handleCreateTask() {
+  const handleCreateTask = async () => {
     const errors: string[] = [];
 
-    if (
-      !title.trim() ||
-      !description.trim() ||
-      !address.trim() ||
-      !taskDate.trim()
-    ) {
+    if (isAnyFieldEmpty) {
       errors.push("Fill in all the input fields");
     }
 
@@ -126,7 +125,7 @@ export default function CreateTaskScreen() {
         <View style={styles.buttonWrapper}>
           {toastVisible && (
             <Animated.View style={[styles.toast, { opacity }]}>
-                <Text style={styles.toastText}>{errorToast}</Text>
+              <Text style={styles.toastText}>{errorToast}</Text>
             </Animated.View>
           )}
 

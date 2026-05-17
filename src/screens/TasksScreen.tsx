@@ -1,49 +1,36 @@
 import {
   FlatList,
   StyleSheet,
-  View,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import {
-  useNavigation,
-  useFocusEffect,
-} from "@react-navigation/native";
-import { 
-  useEffect, 
-  useState,
   useCallback,
+  useEffect,
   useMemo,
+  useState,
 } from "react";
+import {useNavigation, useFocusEffect} from "@react-navigation/native";
 import TaskCard from "../components/TaskCard";
 import { mockTasks } from "../constants/mockTasks";
 import { Task } from "../types/task";
-import {
-  loadTasks,
-  saveTasks,
-  isFirstLaunch,
-} from "../storage/tasksStorage";
+import { loadTasks, saveTasks, isFirstLaunch } from "../storage/tasksStorage";
 import { parse } from "date-fns";
 
 export default function TasksScreen() {
   const navigation = useNavigation<any>();
 
-  const [tasks, setTasks] =
-    useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [sortBy, setSortBy] =
-    useState<"date" | "status">(
-      "date"
-    );
+  const [sortBy, setSortBy] = useState<"date" | "status">("date");
 
   useFocusEffect(
     useCallback(() => {
       async function fetchTasks() {
-        const storedTasks =
-          await loadTasks();
+        const storedTasks = await loadTasks();
 
-        const firstLaunch =
-          await isFirstLaunch();
+        const firstLaunch = await isFirstLaunch();
 
         if (firstLaunch) {
           setTasks(mockTasks);
@@ -68,23 +55,13 @@ export default function TasksScreen() {
     const copiedTasks = [...tasks];
 
     if (sortBy === "status") {
-      return copiedTasks.sort((a, b) =>
-        a.status.localeCompare(b.status)
-      );
+      return copiedTasks.sort((a, b) => a.status.localeCompare(b.status));
     }
 
     return copiedTasks.sort((a, b) => {
-      const dateA = parse(
-        a.taskDate,
-        "dd.MM.yyyy HH:mm",
-        new Date()
-      ).getTime();
+      const dateA = parse(a.taskDate, "dd.MM.yyyy HH:mm", new Date()).getTime();
 
-      const dateB = parse(
-        b.taskDate,
-        "dd.MM.yyyy HH:mm",
-        new Date()
-      ).getTime();
+      const dateB = parse(b.taskDate, "dd.MM.yyyy HH:mm", new Date()).getTime();
 
       return dateA - dateB;
     });
@@ -94,42 +71,22 @@ export default function TasksScreen() {
     <View style={styles.container}>
       <View style={styles.sortContainer}>
         <TouchableOpacity
-          style={[
-            styles.sortButton,
-            sortBy === "date" &&
-              styles.activeSortButton,
-          ]}
+          style={[styles.sortButton, sortBy === "date" && styles.activeSortButton]}
           onPress={() => setSortBy("date")}
         >
           <Text
-            style={[
-              styles.sortButtonText,
-              sortBy === "date" && {
-                color: "#fff",
-              },
-            ]}
+            style={[styles.sortButtonText, sortBy === "date" && {color: "#fff"}]}
           >
             Sort by date
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[
-            styles.sortButton,
-            sortBy === "status" &&
-              styles.activeSortButton,
-          ]}
-          onPress={() =>
-            setSortBy("status")
-          }
+          style={[styles.sortButton, sortBy === "status" && styles.activeSortButton]}
+          onPress={() => setSortBy("status")}
         >
           <Text
-            style={[
-              styles.sortButtonText,
-              sortBy === "status" && {
-                color: "#fff",
-              },
-            ]}
+            style={[styles.sortButtonText, sortBy === "status" && {color: "#fff"}]}
           >
             Sort by status
           </Text>
@@ -140,23 +97,21 @@ export default function TasksScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              {"No tasks yet.\nTap + to create your first task."}
+              No tasks yet.{"\n"}Tap + to create your first task.
             </Text>
           </View>
         }
         data={sortedTasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TaskCard task={item} />
+          <TaskCard task={item}/>
         )}
         contentContainerStyle={styles.list}
       />
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() =>
-          navigation.navigate("CreateTask")
-        }
+        onPress={() => navigation.navigate("CreateTask")}
       >
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
@@ -179,27 +134,20 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 30,
-
     width: 60,
     height: 60,
-
     borderRadius: 999,
-
     backgroundColor: "#111827",
-
     justifyContent: "center",
     alignItems: "center",
 
     shadowColor: "#000",
-
     shadowOffset: {
       width: 0,
       height: 4,
     },
-
     shadowOpacity: 0.2,
     shadowRadius: 6,
-
     elevation: 5,
   },
 

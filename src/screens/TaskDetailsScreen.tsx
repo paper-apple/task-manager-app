@@ -1,26 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Alert,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
-
-import {
-  deleteTask,
-  loadTasks,
-  updateTaskStatus,
-} from "../storage/tasksStorage";
-
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { deleteTask, loadTasks, updateTaskStatus } from "../storage/tasksStorage";
 import { Task } from "../types/task";
 import { formatStatus } from "../utils/formatStatus";
 
@@ -38,13 +26,13 @@ export default function TaskDetailsScreen() {
     const currentTask = tasks.find((item) => item.id === taskId);
 
     if (currentTask) {
-      setTask(currentTask);
-    }
+      setTask(currentTask) 
+    };
   }
 
-    useEffect(() => {
-      fetchTask();
-    }, []);
+  useEffect(() => {
+    fetchTask();
+  }, []);
 
   async function handleDelete() {
     if (!task) {
